@@ -1,6 +1,30 @@
 import argparse, os, time
 from selenium import webdriver
 from bs4 import BeautifulSoup
+import random
+
+
+
+base = "https://www.linkedin.com"
+
+
+
+def getPeopleLinks(page):
+    links = []
+    urls =  page.find_all("a")
+
+    for link in urls:
+        url = link.get('href')
+        if url:
+            if "www.linkedin.com" in url and "miniProfileUrn" in url:
+                url = "{}/".format(str(url.replace(base, "").split("?")[0]))
+            if '/in' in url and not "www.linkedin.com" in url:
+                if url not in links:
+                    links.append(url)
+    return links
+
+
+
 
 
 
@@ -11,9 +35,13 @@ def ViewBot(browser):
     visited = {}
     pList = []
     count = 0
-    print(browser)
+    while True:
+        time.sleep(random.uniform(3.5, 6.9))
+        page = BeautifulSoup(browser.page_source, "html.parser")
+        people = getPeopleLinks(page)
 
-
+        print(people)
+        quit()
 
 
 
@@ -46,6 +74,11 @@ def main():
     args = parser.parse_args()
     email = args.email
     password = args.password
+
+    if not email or not password:
+        print("Arguments missing, please try \n linkedinBot.py -h for help")
+        quit()
+
     browser = webdriver.Chrome("{}/chromedriver".format(os.getcwd()))
     browser.get("https://linkedin.com/uas/login")
     login(email, password, browser)
