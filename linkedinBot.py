@@ -5,8 +5,45 @@ import random
 
 
 
-base = "https://www.linkedin.com"
+# ======================================================
+#                   CONFIG
+# ======================================================
+# 
+# email and password
+auto_email = ""
+auto_password = ""
+# 
+#keywords to search for specific topics, skills, fields, jobs, etc ... 
+keywords = [
+    
+    "php",
+    "python",
+    "software",
+    "django",
+    "machine learning",
+    "data analysis",
+    "Google",
+    "web development", 
+    "programming"
+]
+# =========================================================
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+base = "https://www.linkedin.com"
 
 
 def getPeopleLinks(page):
@@ -31,17 +68,84 @@ def getPeopleLinks(page):
 
 
 
-def ViewBot(browser):
+def getJobLinks(page):
+	links = []
+	for link in page.find_all('a'):
+		url = link.get('href')
+		if url:		
+			if '/jobs' in url:
+				links.append(url)
+	return links
+
+
+
+
+
+
+
+
+
+
+def getUsername(url):
+    return url.split("/")[2]
+    
+
+
+
+
+
+
+
+
+
+def ViewBot(browser, param_keyword=None):
     visited = {}
     pList = []
     count = 0
+
+    if len(visited) == 0 and len(pList) == 0 and count == 0:
+        if param_keyword != None or len(keywords) > 0:
+            time.sleep(random.uniform(3.5, 6.9))
+            if param_keyword:
+                searchword = param_keyword
+            else: 
+                searchword = random.choice(keywords)
+            search_link =  "{}/search/results/all/?keywords={}&origin=GLOBAL_SEARCH_HEADER".format(base, str(searchword).replace(" ", "%20"))
+            print("Searching for {} connections".format(searchword))
+            browser.get(search_link)
+
     while True:
         time.sleep(random.uniform(3.5, 6.9))
         page = BeautifulSoup(browser.page_source, "html.parser")
         people = getPeopleLinks(page)
 
-        print(people)
-        quit()
+        if people:
+            for person in people:
+                username = getUsername(person)
+                if not username in visited:
+                    pList.append(person)
+                    visited[username] = 1
+        if pList:
+            person = pList.pop()
+            profile = "{}{}".format(base, person)
+            browser.get(profile)
+            count += 1
+        else:
+            jobs = getJobLinks(page)
+            if jobs:
+                job = random.choice(jobs)
+                root = 'http://www.linkedin.com'
+                roots = 'https://www.linkedin.com'
+                if root not in job or roots not in job:
+                    job = 'https://www.linkedin.com'+job
+                browser.get(job)
+            else:
+                print("I'm Lost Exiting")
+                break
+        #Output (Make option for this)			
+        print( "[+] "+str(browser.title)+" Visited! \n("+str(count)+"/"+str(len(pList))+") Visited/Queue)")
+
+
 
 
 
@@ -71,20 +175,35 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--email", "-e",  help="linkedin email")
     parser.add_argument("--password", "-p", help="linkedin password")
+    parser.add_argument("-a", "--auto", action="store_true", help="Automatic search (Email and password saved in script)")
+    parser.add_argument("-k", "--keyword", help="Search for a keyword so that all connections are related to a specific field, skill, job")
+    param_keyword = None
     args = parser.parse_args()
     email = args.email
     password = args.password
-
-    if not email or not password:
-        print("Arguments missing, please try \n linkedinBot.py -h for help")
+    
+    if (not email or not password) and (not args.auto):
+        args = parser.parse_args(["-h"])
         quit()
+
+    if args.auto:
+        if auto_email == "" or auto_password == "":
+            print("Please set auto_email and auto_password in the CONFIG section of this script")
+            quit()
+        email = auto_email
+        password = auto_password
+
+
+    if args.keyword:
+        param_keyword = args.keyword
+
 
     browser = webdriver.Chrome("{}/chromedriver".format(os.getcwd()))
     browser.get("https://linkedin.com/uas/login")
     login(email, password, browser)
     os.system('clear')
     print("[+] Success! Logged In, Bot Starting!")
-    ViewBot(browser)
+    ViewBot(browser, param_keyword)
     browser.close()
 
 
