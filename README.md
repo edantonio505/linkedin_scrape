@@ -6,9 +6,9 @@ This is a script based on [this](https://www.youtube.com/watch?v=twRQNSFXiYs) vi
 
 
 ### Prerequisites
-* Python3
-* BeautifulSoup
-* Selenium
+* [Python3](https://www.python.org/)
+* [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
+* [Selenium](https://selenium-python.readthedocs.io/)
 
 
 
