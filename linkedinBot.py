@@ -2,6 +2,7 @@ import argparse, os, time
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import random
+from collections import deque
 
 
 
@@ -11,7 +12,7 @@ import random
 # 
 # email and password
 auto_email = ""
-auto_password = ""
+auto_password = "
 # 
 #keywords to search for specific topics, skills, fields, jobs, etc ... 
 keywords = [
@@ -26,6 +27,11 @@ keywords = [
     "web development", 
     "programming"
 ]
+
+# Time to run
+PERIOD_OF_TIME = 60
+# Chrome driver path
+CHROME_DRIVER_PATH = "/home/edgar/Documents/linkedin_scrape/chromedriver"
 # =========================================================
 
 
@@ -98,10 +104,15 @@ def getUsername(url):
 
 
 
-def ViewBot(browser, param_keyword=None):
+def ViewBot(browser, param_keyword=None, timeout=None):
     visited = {}
-    pList = []
+    # pList = []
+    pList = deque()
     count = 0
+    start = time.time()
+
+    if timeout:
+        PERIOD_OF_TIME = timeout
 
     if len(visited) == 0 and len(pList) == 0 and count == 0:
         if param_keyword != None or len(keywords) > 0:
@@ -126,7 +137,7 @@ def ViewBot(browser, param_keyword=None):
                     pList.append(person)
                     visited[username] = 1
         if pList:
-            person = pList.pop()
+            person = pList.popleft()
             profile = "{}{}".format(base, person)
             browser.get(profile)
             count += 1
@@ -144,7 +155,7 @@ def ViewBot(browser, param_keyword=None):
                 break
         #Output (Make option for this)			
         print( "[+] "+str(browser.title)+" Visited! \n("+str(count)+"/"+str(len(pList))+") Visited/Queue)")
-
+        if time.time() > start + PERIOD_OF_TIME : break
 
 
 
@@ -177,11 +188,14 @@ def main():
     parser.add_argument("--password", "-p", help="linkedin password")
     parser.add_argument("-a", "--auto", action="store_true", help="Automatic search (Email and password saved in script)")
     parser.add_argument("-k", "--keyword", help="Search for a keyword so that all connections are related to a specific field, skill, job")
+    parser.add_argument("-t", "--timeout", help="Timeout time to run. Time to run before stopping (Seconds)")
     param_keyword = None
+    timeout = None
     args = parser.parse_args()
     email = args.email
     password = args.password
-    
+
+
     if (not email or not password) and (not args.auto):
         args = parser.parse_args(["-h"])
         quit()
@@ -198,12 +212,20 @@ def main():
         param_keyword = args.keyword
 
 
-    browser = webdriver.Chrome("{}/chromedriver".format(os.getcwd()))
+
+    if args.timeout:
+        timeout = int(args.timeout)
+
+
+    try:
+        browser = webdriver.Chrome("{}/chromedriver".format(os.getcwd()))
+    except:
+        browser = webdriver.Chrome(CHROME_DRIVER_PATH)
     browser.get("https://linkedin.com/uas/login")
     login(email, password, browser)
     os.system('clear')
     print("[+] Success! Logged In, Bot Starting!")
-    ViewBot(browser, param_keyword)
+    ViewBot(browser, param_keyword, timeout)
     browser.close()
 
 
