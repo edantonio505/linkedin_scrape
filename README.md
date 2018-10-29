@@ -69,8 +69,6 @@ keywords = [
     "django",
     "machine learning",
     "data analysis",
-97
- ####
     "Google",
     "web development", 
     "programming"
