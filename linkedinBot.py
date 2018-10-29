@@ -12,7 +12,7 @@ from collections import deque
 # 
 # email and password
 auto_email = ""
-auto_password = "
+auto_password = ""
 # 
 #keywords to search for specific topics, skills, fields, jobs, etc ... 
 keywords = [
