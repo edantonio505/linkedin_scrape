@@ -15,8 +15,8 @@ auto_email = ""
 auto_password = ""
 # 
 #keywords to search for specific topics, skills, fields, jobs, etc ... 
+# provide keywords in (string) separated by commas.
 keywords = [
-    
     "php",
     "python",
     "software",
@@ -29,8 +29,9 @@ keywords = [
 ]
 
 # Time to run
-PERIOD_OF_TIME = 60
+PERIOD_OF_TIME = 300
 # Chrome driver path
+# Only provide this if you would like this script to run on a cronjob. 
 CHROME_DRIVER_PATH = ""
 # =========================================================
 
@@ -183,11 +184,11 @@ def login(email, password, browser):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--email", "-e",  help="linkedin email")
-    parser.add_argument("--password", "-p", help="linkedin password")
-    parser.add_argument("-a", "--auto", action="store_true", help="Automatic search (Email and password saved in script)")
-    parser.add_argument("-k", "--keyword", help="Search for a keyword so that all connections are related to a specific field, skill, job")
-    parser.add_argument("-t", "--timeout", help="Timeout time to run. Time to run before stopping (Seconds)")
+    parser.add_argument("--email", "-e",  help="Linkedin email.")
+    parser.add_argument("--password", "-p", help="Linkedin password.")
+    parser.add_argument("-a", "--auto", action="store_true", help="Automatic login (provide email and password by changing the values in the CONFIG section of this script).")
+    parser.add_argument("-k", "--keyword", help="(Optional) All linkedin users will be related to this specific keyword. If a keyword is not provided a keyword list can be set in the CONFIG section of this script.")
+    parser.add_argument("-t", "--timeout", help="(Optional) Time in seconds this script will run before stopping. It is recommended to set a timeout of at most 15 minutes (900 seconds) to prevent Linkedin from suspending your account. The default time is 5 minutes (300 seconds).")
     param_keyword = None
     timeout = None
     args = parser.parse_args()
@@ -195,6 +196,7 @@ def main():
     password = args.password
 
     if (not email or not password) and (not args.auto):
+        print("Please include email and password using the -p and -e options or automate the task by providing auto_email and auto_password in the CONFIG section of this script.")
         args = parser.parse_args(["-h"])
         quit()
 
