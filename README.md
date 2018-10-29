@@ -2,7 +2,7 @@
 
 
 
-This is a script based on [this](https://www.youtube.com/watch?v=twRQNSFXiYs&t=384s) video.
+This is a script based on [this](https://www.youtube.com/watch?v=twRQNSFXiYs) video.
 
 
 ### Prerequisites
