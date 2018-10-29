@@ -31,7 +31,7 @@ keywords = [
 # Time to run
 PERIOD_OF_TIME = 60
 # Chrome driver path
-CHROME_DRIVER_PATH = "/home/edgar/Documents/linkedin_scrape/chromedriver"
+CHROME_DRIVER_PATH = ""
 # =========================================================
 
 
@@ -106,7 +106,6 @@ def getUsername(url):
 
 def ViewBot(browser, param_keyword=None, timeout=None):
     visited = {}
-    # pList = []
     pList = deque()
     count = 0
     start = time.time()
@@ -195,7 +194,6 @@ def main():
     email = args.email
     password = args.password
 
-
     if (not email or not password) and (not args.auto):
         args = parser.parse_args(["-h"])
         quit()
@@ -207,15 +205,11 @@ def main():
         email = auto_email
         password = auto_password
 
-
     if args.keyword:
         param_keyword = args.keyword
 
-
-
     if args.timeout:
         timeout = int(args.timeout)
-
 
     try:
         browser = webdriver.Chrome("{}/chromedriver".format(os.getcwd()))
