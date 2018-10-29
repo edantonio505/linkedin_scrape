@@ -56,7 +56,7 @@ You can install it using [Homebrew](https://brew.sh/)
 You need to be in this project's root directory. 
 * `cp /usr/local/bin/chromedriver ./` 
 
-You can also download the chromedriver binary from [here](https://chromedriver.storage.googleapis.com/70.0.3538.67/chromedriver_mac64.zip)
+The chromedriver binary file can also be downloaded from [here](https://chromedriver.storage.googleapis.com/70.0.3538.67/chromedriver_mac64.zip).
 
 
 ### Config
