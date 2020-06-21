@@ -17,7 +17,7 @@ class LinkedInBot:
         self.timeout = timeout
         self.param_keyword = None
         if timeout == None:
-            self.timeout = 300
+            self.timeout = 3000
         if keywords != None:
             self.keywords = keywords
         if len(self.keywords) > 0 and self.param_keyword == None:
@@ -112,6 +112,7 @@ class LinkedInBot:
                 else:
                     print("I'm Lost Exiting")
                     break
+                    
             #Output (Make option for this)			
             print( "[+] "+str(self.browser.title)+" Visited! \n("+str(count)+"/"+str(len(pList))+") Visited/Queue)")
             if time.time() > start + PERIOD_OF_TIME : break

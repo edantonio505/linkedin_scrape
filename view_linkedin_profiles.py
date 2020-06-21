@@ -12,25 +12,19 @@ from linkedinBot import LinkedInBot
 # ======================================================
 # 
 # email and password
-auto_email = ""
-auto_password = ""
+auto_email = "kerri.rapes@gmail.com"
+auto_password = "cntry411"
 # 
 #keywords to search for specific topics, skills, fields, jobs, etc ... 
 # provide keywords in (string) separated by commas.
 keywords = [
-    "php",
-    "python",
-    "software",
-    "django",
-    "machine learning",
-    "data analysis",
-    "Google",
-    "web development", 
-    "programming"
+    "Data Science",
+    "Machine Learning",
+    "Chief Data Officer"
 ]
 
 # Time to run
-PERIOD_OF_TIME = 300
+PERIOD_OF_TIME = 3000
 # Chrome driver path
 # Only provide this if you would like this script to run on a cronjob. 
 CHROME_DRIVER_PATH = ""
@@ -67,7 +61,7 @@ def main():
     parser.add_argument("-k", "--keyword", help="(Optional) All linkedin users will be related to this specific keyword. If a keyword is not provided a keyword list can be set in the CONFIG section of this script.")
     parser.add_argument("-t", "--timeout", help="(Optional) Time in seconds this script will run before stopping. It is recommended to set a timeout of at most 15 minutes (900 seconds) to prevent Linkedin from suspending your account. The default time is 5 minutes (300 seconds).")
     param_keyword = None
-    timeout = PERIOD_OF_TIME
+    timeout = None
     args = parser.parse_args()
     email = args.email
     password = args.password
