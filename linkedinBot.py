@@ -9,6 +9,7 @@ class LinkedInBot:
 
 
     base = "https://www.linkedin.com"
+    ELLIPSE = .75
 
 
     def __init__(self, browser, param_keyword=None, timeout=None, keywords=None):
@@ -17,7 +18,7 @@ class LinkedInBot:
         self.timeout = timeout
         self.param_keyword = None
         if timeout == None:
-            self.timeout = 3000
+            self.timeout = 12000
         if keywords != None:
             self.keywords = keywords
         if len(self.keywords) > 0 and self.param_keyword == None:
@@ -116,6 +117,13 @@ class LinkedInBot:
             #Output (Make option for this)			
             print( "[+] "+str(self.browser.title)+" Visited! \n("+str(count)+"/"+str(len(pList))+") Visited/Queue)")
             if time.time() > start + PERIOD_OF_TIME : break
+
+            if random.random() > self.ELLIPSE:
+                    sleepTime = random.randint(60, 500)
+                    print(f'\n\n********************\n\n')
+                    print(f"Time for a nap - see you in:{int(sleepTime/60)} min")
+                    print('\n\n****************************************\n\n')
+                    time.sleep (sleepTime)
 
 
 

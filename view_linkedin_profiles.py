@@ -20,11 +20,13 @@ auto_password = "cntry411"
 keywords = [
     "Data Science",
     "Machine Learning",
-    "Chief Data Officer"
+    "Data",
+    "CTO",
+    "AI"
 ]
 
 # Time to run
-PERIOD_OF_TIME = 3000
+PERIOD_OF_TIME = 12000
 # Chrome driver path
 # Only provide this if you would like this script to run on a cronjob. 
 CHROME_DRIVER_PATH = ""
