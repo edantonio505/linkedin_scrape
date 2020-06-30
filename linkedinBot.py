@@ -2,6 +2,7 @@ import time
 import random
 from collections import deque
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 
@@ -10,17 +11,31 @@ class LinkedInBot:
 
     base = "https://www.linkedin.com"
     ELLIPSE = .75
+    blacklist = ["Staffigo"]
 
 
-    def __init__(self, browser, param_keyword=None, timeout=None, keywords=None):
+    def __init__(self, browser, param_keyword=None, timeout=None, keywords=None, keyword_file=None, file_column=None):
+        print("LinkedInBot")
         self.browser = browser
         self.keywords = []
         self.timeout = timeout
         self.param_keyword = None
         if timeout == None:
             self.timeout = 12000
-        if keywords != None:
+
+
+        if keywords != None and keyword_file != None:
+            #raise Exception("Cannot use both keywords and keyword_file")
+            print("Cannot use both keywords and keyword_file")
+        elif keywords != None:
             self.keywords = keywords
+        elif keyword_file != None and file_column == None:
+            #raise Exception("When using keyword_file you must also enter the target column name in file_column")
+            print("When using keyword_file you must also enter the target column name in file_column")
+        elif keyword_file != None and file_column != None:
+            self.keywords = self.get_targets(keyword_file, file_column)
+
+        print(self.keywords)
         if len(self.keywords) > 0 and self.param_keyword == None:
             self.param_keyword = random.choice(self.keywords)
         else:
@@ -36,6 +51,17 @@ class LinkedInBot:
         message += "\t-timeout: {}\n".format(self.timeout)
         message += "\t-keywords: {}".format(self.keywords)
         return message
+
+
+    def get_targets(self, filename, column):
+        print("Parsing File...")
+        df = pd.read_csv(filename,
+                        header=None,
+                        names=['timestamp', 'jobID', 'job', 'company', 'attempted', 'result'])
+        print(f"length: {len(df)}")
+        targets = list(set(list(df[column])))
+        targets = [target for target in targets if target not in self.blacklist]
+        return targets
 
 
     def get_people_links(self, page):
