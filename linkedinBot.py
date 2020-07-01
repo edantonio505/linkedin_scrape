@@ -104,14 +104,16 @@ class LinkedInBot:
             
         print("This script will run for {} minutes.".format(str(self.timeout//60)))
 
-        if len(visited) == 0 and len(pList) == 0 and count == 0:
-            if self.param_keyword != None or len(self.keywords) > 0:
+        first_run = (len(visited) == 0 and len(pList) == 0 and count == 0)
+
+        while True:
+            if first_run or random.random() > self.ELLIPSE:
+                self.param_keyword = random.choice(self.keywords)
                 time.sleep(random.uniform(3.5, 6.9))
                 search_link =  "{}/search/results/all/?keywords={}&origin=GLOBAL_SEARCH_HEADER".format(self.base, str(self.param_keyword).replace(" ", "%20"))
                 print("Searching for {} connections".format(self.param_keyword))
                 self.browser.get(search_link)
 
-        while True:
             time.sleep(random.uniform(3.5, 6.9))
             page = BeautifulSoup(self.browser.page_source, "html.parser")
             people = self.get_people_links(page)
