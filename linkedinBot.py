@@ -3,6 +3,7 @@ import random
 from collections import deque
 from bs4 import BeautifulSoup
 import pandas as pd
+from datetime import datetime, timedelta
 
 
 
@@ -59,6 +60,8 @@ class LinkedInBot:
                         header=None,
                         names=['timestamp', 'jobID', 'job', 'company', 'attempted', 'result'])
         print(f"length: {len(df)}")
+        df['timestamp'] = pd.to_datetime(df['timestamp'], format="%Y-%m-%d %H:%M:%S.%f")
+        df = df[df['timestamp'] > (datetime.now() - timedelta(days=2))]
         targets = list(set(list(df[column])))
         targets = [target for target in targets if target not in self.blacklist]
         return targets
