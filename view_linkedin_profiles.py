@@ -94,7 +94,11 @@ def main():
     login(email, password, browser)
     os.system('clear')
     print("[+] Success! Logged In, Bot Starting!")
-    bot = LinkedInBot(browser, param_keyword, keywords=keywords, timeout=timeout)
+    #bot = LinkedInBot(browser, param_keyword, keywords=keywords, timeout=timeout)
+    bot = LinkedInBot(browser, 
+                        param_keyword, 
+                        keyword_file='/home/kerri/Documents/Projects/linkedin/LinkedIn-Easy-Apply-Bot/output.csv',
+                        file_column='company')
     bot.visit_profiles()
     browser.close()
 
