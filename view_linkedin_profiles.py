@@ -12,8 +12,9 @@ from linkedinBot import LinkedInBot
 # ======================================================
 # 
 # email and password
-auto_email = "kerri.rapes@gmail.com"
-auto_password = "cntry411"
+# fill out with email and password
+auto_email = ""
+auto_password = ""
 # 
 #keywords to search for specific topics, skills, fields, jobs, etc ... 
 # provide keywords in (string) separated by commas.
